@@ -1,0 +1,22 @@
+name: flutter_chatting
+description: flutter chatting
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.0
+  flutter_bloc:
+  cloud_firestore:
+  firebase_auth: ^0.16.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
