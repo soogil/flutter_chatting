@@ -21,14 +21,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       bool isLogin = false;
       try {
         isLogin = await _signIn(event);
+        print('LoginEndState $event');
         yield LoginEndState(isLogin);
       } catch(e) {
+        print('LoginErrorState $e');
         yield LoginErrorState();
       }
     } else if (event is SignUpEvent) {
       if (event.signUp == SignUp.changePage) yield ChangePageState();
       else if (event.signUp == SignUp.signUp) {
-        _signUp(event);
+        await _signUp(event);
+        yield LoginInitState();
       }
     }
   }
