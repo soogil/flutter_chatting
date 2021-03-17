@@ -3,15 +3,16 @@ description: flutter chatting
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
   flutter_bloc:
-  firebase_auth: ^0.16.0
-  cloud_firestore: ^0.13.5
+  firebase_auth: ^0.16.1
+  firebase_database: ^3.1.6
+  firebase_core: ^0.4.5
   shared_preferences: ^0.5.3+4
   meta: ^1.1.8
   equatable: 1.2.6

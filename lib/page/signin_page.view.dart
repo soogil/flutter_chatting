@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/login_bloc.dart';
+import 'package:flutter_chatting/bloc/login_event.dart';
+import 'package:flutter_chatting/bloc/login_state.dart';
+import 'package:flutter_chatting/page/chatting_room_list_page.view.dart';
+import 'package:flutter_chatting/view/sign-up.view.dart';
 
 
-class SignInPageView extends StatelessWidget {
+class SignInPage extends StatelessWidget {
 
   final TextEditingController idTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: _getAppBar(),
       body: _getBody(context),
     );
@@ -25,26 +31,45 @@ class SignInPageView extends StatelessWidget {
   Widget _getBody(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (_, state) {
-        if (state is LoginLoading) return Center(child: CircularProgressIndicator());
-        else if (state is LoginEnd) {
-          if(state.isLogin) {
-            return Container(
-              color: Colors.blue,
-            );
-          }
+        if (state is LoginLoadingState) return Center(child: CircularProgressIndicator());
+        else if (state is LoginEndState && state.isLogin) {
+          _afterLayout(
+            function: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoomListPage()))
+          );
+        } else if (state is ChangePageState) {
+          return SignUpView();
+        } else if(state is LoginErrorState) {
+          _afterLayout(function: () => _popUpDialog(context));
         }
 
-          return Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
+        return _getSignInView(context);
+      },
+    );
+  }
+
+  Widget _getSignInView(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(25),
+      alignment: Alignment.center,
+      child: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _getIdField(),
+            SizedBox(height: 10),
+            _getPasswordField(),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _getIdField(),
-                _getPasswordField(),
                 _getLoginButton(context),
+                _getSignUpButton(context),
               ],
             ),
-          );
-      },
+          ],
+        ),
+      ),
     );
   }
 
@@ -85,15 +110,39 @@ class SignInPageView extends StatelessWidget {
   }
 
   Widget _getLoginButton(BuildContext context) {
-    return OutlineButton(
+    return OutlinedButton(
       onPressed: () {
-        print('${idTextController.text} ${passwordTextController.text}');
-        BlocProvider.of<LoginBloc>(context).add(LoginProgress(idTextController.text, passwordTextController.text));
+        if (formKey.currentState.validate())
+          BlocProvider.of<LoginBloc>(context).add(LoginProgressEvent(idTextController.text, passwordTextController.text));
+        else
+          _popUpDialog(context);
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      child: Text(
-          '로그인'
+      child: Text('로그인'),
+    );
+  }
+
+  _getSignUpButton(BuildContext context) {
+    return OutlinedButton(
+      onPressed: () {
+        BlocProvider.of<LoginBloc>(context).add(SignUpEvent(SignUp.changePage));
+      },
+      child: Text('가입'),
+    );
+  }
+
+  _popUpDialog(BuildContext context, {String text = '아이디, 비밀번호를 확인해주세요.'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: Text(text),
+        actions: [FlatButton(onPressed: () => Navigator.pop(context), child: Text('확인'))],
       ),
     );
+  }
+
+  _afterLayout({Function function}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      function();
+    });
   }
 }

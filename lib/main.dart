@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/login_bloc.dart';
 import 'package:flutter_chatting/page/signin_page.view.dart';
-import 'package:flutter_chatting/repository/login_repository.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,8 +16,8 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider(
-          create: (_) => LoginBloc(LoginRepository()),
-          child: SignInPageView()
+          create: (_) => LoginBloc(),
+          child: SignInPage()
       ),
     );
   }

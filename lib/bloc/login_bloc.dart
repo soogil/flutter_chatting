@@ -1,54 +1,49 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chatting/bloc/login_event.dart';
+import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/repository/login_repository.dart';
+import 'package:flutter_chatting/repository/user_repository.dart';
 
-abstract class LoginState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
-
-class LoginInitState extends LoginState {}
-class LoginLoading extends LoginState { }
-class LoginEnd extends LoginState {
-  LoginEnd(this.isLogin);
-
-  final bool isLogin;
-
-  @override
-  List<Object> get props => [isLogin];
-}
-
-
-abstract class LoginEvent extends Equatable {
-  const LoginEvent();
-  @override
-  List<Object> get props => [];
-}
-
-class LoginProgress extends LoginEvent {
-  LoginProgress(this.id, this.password);
-
-  final String id;
-  final String password;
-
-  @override
-  List<Object> get props => [id, password];
-}
+import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc(this.loginRepository) : super(LoginInitState());
+  LoginBloc() : super(LoginInitState());
 
-  final LoginRepository loginRepository;
+  final LoginRepository loginRepository = LoginRepository();
+  final UserRepository userRepository = UserRepository();
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if(event is LoginProgress) {
-      print('mapEventToState ${event.id} ${event.password}');
-      yield LoginLoading();
-      final user = await loginRepository.login(event.id, event.password);
-      print('mapEventToState Login ${user}');
-      yield LoginEnd(user != null);
+    if (event is LoginInitEvent) {
+      yield LoginInitState();
+    } else if (event is LoginProgressEvent) {
+      yield LoginLoadingState();
+      bool isLogin = false;
+      try {
+        isLogin = await _signIn(event);
+        yield LoginEndState(isLogin);
+      } catch(e) {
+        yield LoginErrorState();
+      }
+    } else if (event is SignUpEvent) {
+      if (event.signUp == SignUp.changePage) yield ChangePageState();
+      else if (event.signUp == SignUp.signUp) {
+        _signUp(event);
+      }
     }
+  }
+
+  Future<bool> _signIn(LoginProgressEvent event) async => await loginRepository.signIn(event.id, event.password);
+
+  Future _signUp(SignUpEvent event) async {
+    final user = User(event.name, event.id, event.password);
+    await loginRepository.signUp(user.id, user.password).then((bool isSignUp) {
+      if(isSignUp) {
+        final result = userRepository.registerUser(user.toMap);
+        print('_signUp $result');
+        return result;
+      }
+    });
   }
 
   @override

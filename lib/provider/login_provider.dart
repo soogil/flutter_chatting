@@ -1,11 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginProvider {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<FirebaseUser> signIn(String id, String password) async {
     try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(email: id, password: password);
+      AuthResult result = await auth.signInWithEmailAndPassword(email: id, password: password);
+      return result.user;
+    }
+    catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<FirebaseUser> signUp(String id, String password) async {
+    try {
+      AuthResult result = await auth.createUserWithEmailAndPassword(
+          email: id,
+          password: password
+      );
       return result.user;
     }
     catch (e) {
@@ -15,6 +28,6 @@ class LoginProvider {
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
+    await auth.signOut();
   }
 }
