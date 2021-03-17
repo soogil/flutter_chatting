@@ -92,7 +92,7 @@ class SignUpView extends StatelessWidget {
   }
 
   Widget _getRegisterButton(BuildContext context) {
-    return OutlineButton(
+    return OutlinedButton(
       onPressed: () {
         print('${idTextController.text} ${passwordTextController.text}');
         BlocProvider.of<LoginBloc>(context).add(SignUpEvent(
@@ -102,17 +102,15 @@ class SignUpView extends StatelessWidget {
             password: passwordTextController.text
         ));
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Text('가입'),
     );
   }
 
   _getLoginButton(BuildContext context) {
-    return OutlineButton(
+    return OutlinedButton(
       onPressed: () {
         BlocProvider.of<LoginBloc>(context).add(LoginInitEvent());
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Text('로그인 화면으로'),
     );
   }
