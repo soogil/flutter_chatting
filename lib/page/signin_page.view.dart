@@ -31,11 +31,12 @@ class SignInPage extends StatelessWidget {
   Widget _getBody(BuildContext context) {
     return BlocBuilder<SignInBloc, SignInState>(
       builder: (_, state) {
-        if (state is SignInLoadingState) return Center(child: CircularProgressIndicator());
-        else if (state is SignInEndState && state.isLogin) {
-          print('SignInEndState');
+        if (state is SignInLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is SignInEndState && state.isLogin) {
           _afterLayout(
-            function: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoomListPage()))
+            function: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoomListPage()))
           );
         } else if (state is SignUpInitState) {
           return SignUpView();

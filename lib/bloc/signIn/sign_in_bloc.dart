@@ -43,14 +43,14 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     try {
       return await loginRepository.signIn(event.id, event.password).then((fbUser) async {
         SignInUser().user = await userRepository.getUserByEmail(fbUser.email);
-        print(SignInUser().user.toMap);
         return fbUser != null;
       });
-    } catch(e) {
-      print('LoginErrorState $e');
+    } catch (e) {
+      print('SignIn Exception $e');
       return false;
     }
   }
+
   Future<bool> _signUp(SignUpEvent event) async {
     final user = User(event.name, event.id, event.password);
     try {
@@ -63,7 +63,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         return false;
       });
     } catch(e) {
-      print('_signUp');
+      print('SignUp Exception $e');
       return false;
     }
   }

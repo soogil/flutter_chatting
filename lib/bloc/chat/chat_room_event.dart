@@ -1,5 +1,3 @@
 
 
-class ChatRoomInitEvent {
-
-}
+class ChatRoomInitEvent {}
