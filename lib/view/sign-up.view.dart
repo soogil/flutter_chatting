@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatting/bloc/login_bloc.dart';
-import 'package:flutter_chatting/bloc/login_event.dart';
+import 'package:flutter_chatting/bloc/signIn/sign_in_bloc.dart';
+import 'package:flutter_chatting/bloc/signIn/sign_in_event.dart';
 
 class SignUpView extends StatelessWidget {
   
@@ -95,7 +95,7 @@ class SignUpView extends StatelessWidget {
     return OutlinedButton(
       onPressed: () {
         print('${idTextController.text} ${passwordTextController.text}');
-        BlocProvider.of<LoginBloc>(context).add(SignUpEvent(
+        BlocProvider.of<SignInBloc>(context).add(SignUpEvent(
             SignUp.signUp,
             name: nameTextController.text,
             id: idTextController.text,
@@ -109,7 +109,7 @@ class SignUpView extends StatelessWidget {
   _getLoginButton(BuildContext context) {
     return OutlinedButton(
       onPressed: () {
-        BlocProvider.of<LoginBloc>(context).add(LoginInitEvent());
+        BlocProvider.of<SignInBloc>(context).add(SignInInitEvent());
       },
       child: Text('로그인 화면으로'),
     );

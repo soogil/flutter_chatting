@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatting/bloc/login_bloc.dart';
-import 'package:flutter_chatting/bloc/login_event.dart';
-import 'package:flutter_chatting/bloc/login_state.dart';
+import 'package:flutter_chatting/bloc/signIn/sign_in_bloc.dart';
+import 'package:flutter_chatting/bloc/signIn/sign_in_event.dart';
+import 'package:flutter_chatting/bloc/signIn/sign_in_state.dart';
 import 'package:flutter_chatting/page/chatting_room_list_page.view.dart';
 import 'package:flutter_chatting/view/sign-up.view.dart';
 
 
 class SignInPage extends StatelessWidget {
 
-  final TextEditingController idTextController = TextEditingController();
-  final TextEditingController passwordTextController = TextEditingController();
+  final TextEditingController idTextController = TextEditingController(text: 'zmfflrql5@naver.com');
+  final TextEditingController passwordTextController = TextEditingController(text: 'soflau159!');
   final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
@@ -29,16 +29,17 @@ class SignInPage extends StatelessWidget {
   }
 
   Widget _getBody(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocBuilder<SignInBloc, SignInState>(
       builder: (_, state) {
-        if (state is LoginLoadingState) return Center(child: CircularProgressIndicator());
-        else if (state is LoginEndState && state.isLogin) {
+        if (state is SignInLoadingState) return Center(child: CircularProgressIndicator());
+        else if (state is SignInEndState && state.isLogin) {
+          print('SignInEndState');
           _afterLayout(
             function: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ChattingRoomListPage()))
           );
-        } else if (state is ChangePageState) {
+        } else if (state is SignUpInitState) {
           return SignUpView();
-        } else if(state is LoginErrorState) {
+        } else if(state is SignInErrorState) {
           _afterLayout(function: () => _popUpDialog(context));
         }
 
@@ -113,7 +114,7 @@ class SignInPage extends StatelessWidget {
     return OutlinedButton(
       onPressed: () {
         if (formKey.currentState.validate())
-          BlocProvider.of<LoginBloc>(context).add(LoginProgressEvent(idTextController.text, passwordTextController.text));
+          BlocProvider.of<SignInBloc>(context).add(SignInProgressEvent(idTextController.text, passwordTextController.text));
         else
           _popUpDialog(context);
       },
@@ -124,7 +125,7 @@ class SignInPage extends StatelessWidget {
   _getSignUpButton(BuildContext context) {
     return OutlinedButton(
       onPressed: () {
-        BlocProvider.of<LoginBloc>(context).add(SignUpEvent(SignUp.changePage));
+        BlocProvider.of<SignInBloc>(context).add(SignUpEvent(SignUp.changePage));
       },
       child: Text('가입'),
     );

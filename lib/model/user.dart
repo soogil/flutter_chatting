@@ -2,18 +2,23 @@
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  User(this.name, this.id, this.password);
+  User(this.name, this.email, this.password);
 
-  final String id;
+  User.fromJson(Map json) :
+        email = json['email'],
+        password = json['password'],
+        name = json['name'];
+
+  final String email;
   final String password;
   final String name;
 
   Map<String, dynamic> get toMap => {
-    'id': id,
+    'email': email,
     'password': password,
     'name': name,
   };
 
   @override
-  List<Object> get props => [id, name];
+  List<Object> get props => [email, name];
 }

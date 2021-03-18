@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatting/bloc/login_bloc.dart';
+import 'package:flutter_chatting/bloc/chat/chat_room_bloc.dart';
+import 'package:flutter_chatting/bloc/signIn/sign_in_bloc.dart';
 import 'package:flutter_chatting/page/signin_page.view.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+      MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => SignInBloc()),
+            BlocProvider(create: (_) => ChatRoomBloc()),
+          ],
+          child: MyApp()
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,10 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: BlocProvider(
-          create: (_) => LoginBloc(),
-          child: SignInPage()
-      ),
+      home: SignInPage(),
     );
   }
 }

@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_chatting/provider/login_provider.dart';
 
-class LoginRepository {
+class SignInRepository {
   final LoginProvider loginProvider = LoginProvider();
 
-  Future<bool> signIn(String id, String password) async => await loginProvider.signIn(id, password) != null;
+  Future<FirebaseUser> signIn(String id, String password) async => await loginProvider.signIn(id, password);
 
   Future<bool> signUp(String id, String password) async => await loginProvider.signUp(id, password) != null;
 }

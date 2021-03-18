@@ -22,9 +22,8 @@ class LoginProvider {
       return result.user;
     }
     catch (e) {
-      print(e);
+      throw Exception(e);
     }
-    return null;
   }
 
   Future<void> signOut() async {
