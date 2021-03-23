@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_chatting/provider/login_provider.dart';
+import 'package:flutter_chatting/provider/sign_in_provider.dart';
 
 class SignInRepository {
   final LoginProvider loginProvider = LoginProvider();

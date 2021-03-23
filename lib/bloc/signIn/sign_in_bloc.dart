@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/signIn/sign_in_event.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/model/user.dart';
-import 'package:flutter_chatting/repository/login_repository.dart';
+import 'package:flutter_chatting/repository/sign_in_repository.dart';
 import 'package:flutter_chatting/repository/user_repository.dart';
 
 import 'sign_in_state.dart';
