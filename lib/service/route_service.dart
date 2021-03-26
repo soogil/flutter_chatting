@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatting/page/chatting_room_list_page.view.dart';
 import 'package:flutter_chatting/page/chatting_screen_page.view.dart';
+import 'package:flutter_chatting/page/user_list_page.view.dart';
 
 class RouteService {
 
-  Route<dynamic> route(RouteSettings settings) {
+  static Map<String, dynamic> _params = Map();
+
+  static Route<dynamic> routes(RouteSettings settings) {
      switch(settings.name) {
        case RouteNames.chattingListPage:
          return PageRouteSlider(page: ChattingRoomListPage());
-       case RouteNames.chattingRoomPage:
-         return PageRouteSlider(page: ChattingScreenPageView());
+       case RouteNames.chattingScreenPage:
+         return PageRouteSlider(page: ChattingScreenPageView(user: _params[RouteNames.chattingScreenPage]));
+       case RouteNames.userListPage:
+         return PageRouteSlider(page: UserListPageView());
      }
+     return null;
   }
 
-  static void routeSlidePage(BuildContext context) {
-    // route();
+  static Future routeSlidePage(BuildContext context,{
+    String routeName, dynamic params,
+  }) async {
+    _params[routeName] = _params;
+    return await Navigator.pushNamed(context, routeName);
   }
 
   static routePage() {
@@ -25,7 +34,7 @@ class RouteService {
 class PageRouteSlider extends PageRouteBuilder {
   PageRouteSlider({
     @required Widget page,
-    Duration transitionDuration: const Duration(milliseconds: 400),
+    Duration transitionDuration: const Duration(milliseconds: 200),
     RouteSettings settings,
   }) : super(
       pageBuilder: (_, Animation<double> animation, __,) => page,
@@ -43,6 +52,7 @@ class PageRouteSlider extends PageRouteBuilder {
 
 class RouteNames {
   static const String initPage = '/';
-  static const String chattingRoomPage = '/page/chatRoom';
+  static const String chattingScreenPage = '/page/chatRoom';
   static const String chattingListPage = '/page/chatList';
+  static const String userListPage = '/page/userList';
 }

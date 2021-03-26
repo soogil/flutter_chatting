@@ -4,7 +4,7 @@ import 'package:flutter_chatting/bloc/signIn/sign_in_bloc.dart';
 import 'package:flutter_chatting/bloc/signIn/sign_in_event.dart';
 import 'package:flutter_chatting/bloc/signIn/sign_in_state.dart';
 import 'package:flutter_chatting/page/chatting_room_list_page.view.dart';
-import 'package:flutter_chatting/view/sign-up.view.dart';
+import 'package:flutter_chatting/page/sign-up.view.dart';
 
 
 class SignInPage extends StatelessWidget {

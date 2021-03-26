@@ -11,6 +11,9 @@ class PushService {
     _configure();
   }
 
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  String _token;
+
   _configure() {
     firebaseMessaging.configure(
       // FG 메세지 왔을때
@@ -28,16 +31,12 @@ class PushService {
     );
   }
 
-  Future<String> getToken() async {
+  Future<String> _getToken() async {
     return await firebaseMessaging.getToken().then((token) {
       _token = token;
       return token;
-      print('pushService get Token: $token');
     });
   }
 
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  String _token;
-
-  Future<String> get token async => _token ?? getToken();
+  Future<String> get token async => _token ?? _getToken();
 }

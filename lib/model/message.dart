@@ -1,7 +1,7 @@
 
 enum Type {
-  myMessage,
-
+  left,
+  right,
 }
 
 class Message {
@@ -15,4 +15,10 @@ class Message {
   final Type type;
   final String msg;
   final DateTime time;
+
+  Map<String, dynamic> get toMap => {
+      'type': type,
+      'message': msg,
+      'messageTime': time,
+    };
 }

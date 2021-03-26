@@ -1,10 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_chatting/provider/sign_in_provider.dart';
+import 'package:flutter_chatting/model/sign_in_user.dart';
+import 'package:flutter_chatting/model/user.dart';
+import 'package:flutter_chatting/repository/base_repository.dart';
+import 'package:flutter_chatting/service/push_service.dart';
 
-class SignInRepository {
-  final LoginProvider loginProvider = LoginProvider();
+class SignInRepository extends Repository {
+  Future<FirebaseUser> signIn(String id, String password) async {
+    return await loginProvider.signIn(id, password).then((fbUser) async {
+      SignInUser().user = await userProvider.getUserByEmail(fbUser.email);
+      return fbUser;
+    });
+  }
 
-  Future<FirebaseUser> signIn(String id, String password) async => await loginProvider.signIn(id, password);
+  Future<bool> signUp(String name, String id, String password) async  {
+    final token = await PushService().token;
+    final user = User(name, id, password, token);
+    final fbUser = await loginProvider.signUp(id, password);
+    if(fbUser != null) {
+      return await userProvider.registerUser(user.toMap);
+    }
 
-  Future<bool> signUp(String id, String password) async => await loginProvider.signUp(id, password) != null;
+    return false;
+  }
 }

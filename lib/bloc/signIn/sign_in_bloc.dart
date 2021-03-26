@@ -1,9 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/signIn/sign_in_event.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
-import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/repository/sign_in_repository.dart';
-import 'package:flutter_chatting/repository/user_repository.dart';
 
 import 'sign_in_state.dart';
 
@@ -11,7 +9,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc() : super(SignInInitState());
 
   final SignInRepository loginRepository = SignInRepository();
-  final UserRepository userRepository = UserRepository();
 
   @override
   Stream<SignInState> mapEventToState(SignInEvent event) async* {
@@ -41,10 +38,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Future<bool> _signIn(SignInProgressEvent event) async {
     try {
-      return await loginRepository.signIn(event.id, event.password).then((fbUser) async {
-        SignInUser().user = await userRepository.getUserByEmail(fbUser.email);
-        return fbUser != null;
-      });
+      return await loginRepository.signIn(event.id, event.password) != null;
     } catch (e) {
       print('SignIn Exception $e');
       return false;
@@ -52,16 +46,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   Future<bool> _signUp(SignUpEvent event) async {
-    final user = User(event.name, event.id, event.password);
     try {
-      return await loginRepository.signUp(user.email, user.password).then((authEmail) async {
-        if(authEmail) {
-          await userRepository.registerUser(user.toMap);
-          return true;
-        }
-
-        return false;
-      });
+      return await loginRepository.signUp(event.name, event.id, event.password);
     } catch(e) {
       print('SignUp Exception $e');
       return false;

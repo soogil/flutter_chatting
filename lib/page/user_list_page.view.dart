@@ -7,43 +7,40 @@ import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/route_service.dart';
 
 
-class ChattingRoomListPage extends StatelessWidget {
+class UserListPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ChattingBloc>(context).add(ChattingInitEvent());
+    BlocProvider.of<ChattingBloc>(context).add(ChattingUserListEvent());
 
     return Scaffold(
       appBar: _getAppBar(),
       body: _getBody(context),
-      floatingActionButton: _getUserListButton(context),
     );
   }
 
   Widget _getAppBar() {
     return AppBar(
-      title: Text('ChatRoomList'),
+      title: Text('UserList'),
     );
   }
 
   Widget _getBody(BuildContext context) {
     return BlocBuilder<ChattingBloc, ChattingInitState>(
-        builder: (context, state) {
-          return _getChattingRoomList(context, state.items);
-        });
+        builder: (context, state) => _getUserList(context, state.items));
   }
 
-  _getChattingRoomList(BuildContext contextList, List<User> users) {
+  _getUserList(BuildContext contextList, List<User> users) {
     return ListView.separated(
       itemCount: users.length,
-      itemBuilder: (context, index) => _getChattingRoomItem(context, users[index]),
+      itemBuilder: (context, index) => _getUserItem(context, users[index]),
       separatorBuilder: (context, index) => SizedBox(height: 20,),
     );
   }
 
-  _getChattingRoomItem(BuildContext context, User user) {
-    print(user.toMap);
+  _getUserItem(BuildContext context, User user) {
     return FlatButton(
-      onPressed: () => RouteService.routeSlidePage(context, routeName: RouteNames.chattingScreenPage),
+      onPressed: () =>
+          RouteService.routeSlidePage(context, routeName: RouteNames.chattingScreenPage, params: user),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),
@@ -60,18 +57,10 @@ class ChattingRoomListPage extends StatelessWidget {
               Text(user.email,
                 style: TextStyle(
                   fontSize: 13,
-                )
-              ),
+                ),),
             ]
         ),
       ),
-    );
-  }
-
-  Widget _getUserListButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () => RouteService.routeSlidePage(context, routeName: RouteNames.userListPage),
-      child: Icon(Icons.search),
     );
   }
 }

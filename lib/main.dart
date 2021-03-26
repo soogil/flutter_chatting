@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatting/bloc/chat/chat_room_bloc.dart';
+import 'package:flutter_chatting/bloc/chatting/chatting_bloc.dart';
 import 'package:flutter_chatting/bloc/signIn/sign_in_bloc.dart';
 import 'package:flutter_chatting/page/signin_page.view.dart';
 import 'package:flutter_chatting/service/push_service.dart';
+import 'package:flutter_chatting/service/route_service.dart';
 
 void main() {
   runApp(
       MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => SignInBloc()),
-            BlocProvider(create: (_) => ChatRoomBloc()),
+            BlocProvider(create: (_) => ChattingBloc()),
           ],
           child: MyApp()
       )
@@ -23,6 +24,8 @@ class MyApp extends StatelessWidget {
     _getToken();
 
     return MaterialApp(
+      onGenerateRoute: RouteService.routes,
+      initialRoute: '/',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -31,8 +34,5 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  _getToken() async {
-    final String token = await PushService().token;
-    print('MyApp ${token}');
-  }
+  _getToken() async => await PushService().token;
 }
