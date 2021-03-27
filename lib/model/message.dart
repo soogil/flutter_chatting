@@ -9,16 +9,16 @@ class Message extends BaseModel {
   Message({this.type, this.msg, this.time});
 
   Message.fromJson(Map json)
-      : type = json['type'],
-        msg = json['msg'],
-        time = json['time'];
+      : type = Type.values[json['type']],
+        msg = json['message'],
+        time = json['messageTime'];
 
   Type type;
   String msg;
   int time;
 
   Map<String, dynamic> get toJson => {
-      'type': type.toString(),
+      'type': type.index,
       'message': msg,
       'messageTime': time,
   };

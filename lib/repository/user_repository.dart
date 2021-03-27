@@ -20,12 +20,13 @@ class UserRepository extends Repository {
     final Map snapShot = await userProvider.getChattingRoomIds();
     final List<ChattingRoom> chattingRooms = [];
 
-    await Future.forEach(snapShot.values, (element) async {
-      final roomJson = await userProvider.getChattingRoomById(element);
+    if(snapShot != null) {
+      await Future.forEach(snapShot?.values, (element) async {
+        final roomJson = await userProvider.getChattingRoomById(element);
 
-      chattingRooms.add(ChattingRoom.fromJson(roomJson));
-    });
-
+        chattingRooms.add(ChattingRoom.fromJson(roomJson));
+      });
+    }
     return chattingRooms;
   }
 }

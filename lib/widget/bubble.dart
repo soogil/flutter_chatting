@@ -36,18 +36,18 @@ class Bubble extends StatelessWidget {
   }
 }
 
-class BubbleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(500, 0);
-    path.lineTo(30, 30);
-    path.lineTo(0, 0);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
+// class BubbleClipper extends CustomClipper<Path> {
+//   @override
+//   Path getClip(Size size) {
+//     Path path = Path();
+//     path.lineTo(500, 0);
+//     path.lineTo(30, 30);
+//     path.lineTo(0, 0);
+//     return path;
+//   }
+//
+//   @override
+//   bool shouldReclip(CustomClipper<Path> oldClipper) {
+//     return false;
+//   }
+// }

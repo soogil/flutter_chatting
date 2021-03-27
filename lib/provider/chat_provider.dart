@@ -8,14 +8,13 @@ class ChatProvider {
 
   Future _createChattingRoom(String roomId) async {
     await _database.reference().child('channelToken').child(SignInUser().fcmToken).update({'roomId': roomId});
-    await _database.reference().child('channelToken').child(SignInUser().fcmToken).update({'roomId': roomId});
   }
 
-  Future<Object> getMessageList(String roomId) async {
+  Future getMessageList(String roomId) async {
     try {
       return await _database.reference()
           .child('messagesByRoomId')
-          .equalTo(roomId)
+          .child(roomId)
           .once().then((snapshot) => snapshot.value);
     } catch(e) {
       throw Exception(e);

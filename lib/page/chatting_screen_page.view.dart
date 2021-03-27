@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatting/bloc/chatting/chatting_bloc.dart';
-import 'package:flutter_chatting/bloc/chatting/chatting_event.dart';
-import 'package:flutter_chatting/bloc/chatting/chatting_state.dart';
+import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_bloc.dart';
+import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_event.dart';
+import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_state.dart';
 import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/room.dart';
 import 'package:flutter_chatting/widget/bubble.dart';
@@ -16,6 +16,8 @@ class ChattingScreenPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ChattingScreenBloc>(context).add(ChattingScreenInitEvent(room.roomId));
+
     return Scaffold(
       appBar: _getAppBar(),
       body: _getBody(context),
@@ -38,18 +40,17 @@ class ChattingScreenPageView extends StatelessWidget {
   }
 
   Widget _getChattingList() {
-    return BlocBuilder<ChattingBloc, ChattingInitState>(
+    return BlocBuilder<ChattingScreenBloc, ChattingScreenState>(
       builder: (context, state) {
-
         return Expanded(
           child: Container(
             child: ListView.separated(
               reverse: true,
               shrinkWrap: true,
-              itemCount: 5,
+              itemCount: state.messages.length,
               itemBuilder: (context, index) {
                 return Bubble(
-                  message: 'aksjdfklsajfk민ㅇ러ㅣ만어리ㅏㅁ넝리ㅏㄴ머라ㅣㄴ머라ㅣㅁ넝리ㅏㅇㄴ멍리ㅏㅁ너리ALSDJFLASJFLKAFLKAFㅁ아니럼니ㅏ러니ㅏㅁlssdfsdfsdfsfsfsdfafd',
+                  message: state.messages[index].msg,
                   messageTime: DateTime.now(),
                 );
               },
@@ -74,7 +75,7 @@ class ChattingScreenPageView extends StatelessWidget {
             FlatButton(
               onPressed: () {
                 if(messageController.text != null)
-                  BlocProvider.of<ChattingBloc>(context).add(SendChattingEvent(_setMessage()));
+                  BlocProvider.of<ChattingScreenBloc>(context).add(SendMessageEvent(_setMessage()));
               },
               child: Icon(Icons.send),
             ),
