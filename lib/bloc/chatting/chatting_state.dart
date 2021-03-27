@@ -1,18 +1,12 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter_chatting/model/room.dart';
 import 'package:flutter_chatting/model/user.dart';
 
-class ChattingInitState extends Equatable {
-  ChattingInitState({List<User> items}) : items = items ?? List();
-  final List<User> items;
-  @override
-  List<Object> get props => [];
+class ChattingInitState<T extends BaseModel> {
+  ChattingInitState({List<T> items}) : items = items ?? List();
+  final List<T> items;
 }
-class ChattingRoomListState extends ChattingInitState {
-  ChattingRoomListState({List<User> rooms}) : super(items: rooms);
-}
-class UserListState extends ChattingInitState {
-  UserListState({List<User> users}) : super(items: users);
+class ChattingRoomListState extends ChattingInitState<ChattingRoom> {
+  ChattingRoomListState({List<ChattingRoom> rooms}) : super(items: rooms);
 }
 class SendMessageState extends ChattingInitState {
-
 }

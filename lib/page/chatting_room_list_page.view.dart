@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_event.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_state.dart';
+import 'package:flutter_chatting/model/room.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/route_service.dart';
 
@@ -32,37 +33,48 @@ class ChattingRoomListPage extends StatelessWidget {
         });
   }
 
-  _getChattingRoomList(BuildContext contextList, List<User> users) {
+  _getChattingRoomList(BuildContext contextList, List<BaseModel> model) {
     return ListView.separated(
-      itemCount: users.length,
-      itemBuilder: (context, index) => _getChattingRoomItem(context, users[index]),
+      itemCount: model.length,
+      itemBuilder: (context, index) => _getChattingRoomItem(context, model[index]),
       separatorBuilder: (context, index) => SizedBox(height: 20,),
     );
   }
 
-  _getChattingRoomItem(BuildContext context, User user) {
-    print(user.toMap);
+  _getChattingRoomItem(BuildContext context, ChattingRoom room) {
     return FlatButton(
-      onPressed: () => RouteService.routeSlidePage(context, routeName: RouteNames.chattingScreenPage),
+      onPressed: () =>
+          RouteService.routeSlidePage(
+              context, routeName: RouteNames.chattingScreenPage, params: room),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                user.name,
-                style: TextStyle(
-                  fontSize: 17,
-                ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      room.name,
+                      style: TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                        room.lastMessage,
+                        style: TextStyle(
+                          fontSize: 13,
+                        )
+                    ),
+                  ]
               ),
-              SizedBox(height: 15),
-              Text(user.email,
-                style: TextStyle(
-                  fontSize: 13,
-                )
-              ),
-            ]
+            ),
+            Text(
+              room.lastMessageTime,
+            ),
+          ],
         ),
       ),
     );

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatting/bloc/chatting/chatting_bloc.dart';
-import 'package:flutter_chatting/bloc/chatting/chatting_event.dart';
-import 'package:flutter_chatting/bloc/chatting/chatting_state.dart';
+import 'package:flutter_chatting/bloc/user/user_bloc.dart';
+import 'package:flutter_chatting/bloc/user/user_event.dart';
+import 'package:flutter_chatting/bloc/user/user_state.dart';
+import 'package:flutter_chatting/model/message.dart';
+import 'package:flutter_chatting/model/room.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/route_service.dart';
+import 'package:uuid/uuid.dart';
 
 
 class UserListPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ChattingBloc>(context).add(ChattingUserListEvent());
+    BlocProvider.of<UserBloc>(context).add(UserListEvent());
 
     return Scaffold(
       appBar: _getAppBar(),
@@ -25,14 +28,14 @@ class UserListPageView extends StatelessWidget {
   }
 
   Widget _getBody(BuildContext context) {
-    return BlocBuilder<ChattingBloc, ChattingInitState>(
+    return BlocBuilder<UserBloc, UserState>(
         builder: (context, state) => _getUserList(context, state.items));
   }
 
-  _getUserList(BuildContext contextList, List<User> users) {
+  _getUserList(BuildContext contextList, List<BaseModel> models) {
     return ListView.separated(
-      itemCount: users.length,
-      itemBuilder: (context, index) => _getUserItem(context, users[index]),
+      itemCount: models.length,
+      itemBuilder: (context, index) => _getUserItem(context, models[index]),
       separatorBuilder: (context, index) => SizedBox(height: 20,),
     );
   }
@@ -40,7 +43,7 @@ class UserListPageView extends StatelessWidget {
   _getUserItem(BuildContext context, User user) {
     return FlatButton(
       onPressed: () =>
-          RouteService.routeSlidePage(context, routeName: RouteNames.chattingScreenPage, params: user),
+          RouteService.routeSlidePage(context, routeName: RouteNames.chattingScreenPage, params: ChattingRoom(roomId: Uuid().v4(), user: user, message: Message())),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),
@@ -54,10 +57,12 @@ class UserListPageView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 15),
-              Text(user.email,
+              Text(
+                user.email,
                 style: TextStyle(
                   fontSize: 13,
-                ),),
+                ),
+              ),
             ]
         ),
       ),

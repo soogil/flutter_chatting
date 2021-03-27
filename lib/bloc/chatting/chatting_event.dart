@@ -1,16 +1,15 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_chatting/model/user.dart';
+import 'package:flutter_chatting/model/room.dart';
 
-class ChattingInitEvent extends Equatable {
+abstract class ChattingEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-class SendChattingEvent extends ChattingInitEvent {
-  SendChattingEvent(this.user, this.message);
+class ChattingInitEvent extends ChattingEvent {}
+class SendChattingEvent extends ChattingEvent {
+  SendChattingEvent(this.room);
 
-  final User user;
-  final String message;
+  final ChattingRoom room;
   @override
-  List<Object> get props => [user, message];
+  List<Object> get props => [room];
 }
-class ChattingUserListEvent extends ChattingInitEvent {}

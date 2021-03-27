@@ -10,4 +10,6 @@ class SignInUser {
   SignInUser._internal();
 
   User user;
+
+  String get fcmToken => user.fcmToken;
 }

@@ -12,7 +12,7 @@ class RouteService {
        case RouteNames.chattingListPage:
          return PageRouteSlider(page: ChattingRoomListPage());
        case RouteNames.chattingScreenPage:
-         return PageRouteSlider(page: ChattingScreenPageView(user: _params[RouteNames.chattingScreenPage]));
+         return PageRouteSlider(page: ChattingScreenPageView(_params[RouteNames.chattingScreenPage]));
        case RouteNames.userListPage:
          return PageRouteSlider(page: UserListPageView());
      }
@@ -22,7 +22,7 @@ class RouteService {
   static Future routeSlidePage(BuildContext context,{
     String routeName, dynamic params,
   }) async {
-    _params[routeName] = _params;
+    _params[routeName] = params;
     return await Navigator.pushNamed(context, routeName);
   }
 
