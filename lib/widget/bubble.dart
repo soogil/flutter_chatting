@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chatting/model/message.dart';
 
 class Bubble extends StatelessWidget {
   const Bubble({
     @required this.message,
-    @required this.messageTime,
     this.isMineMessage = true,
   });
 
-  final DateTime messageTime;
-  final String message;
+  final Message message;
   final bool isMineMessage;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(
+        left: isMineMessage ? 30 : 0,
+        right: isMineMessage ? 0 : 30,
+      ),
       decoration: BoxDecoration(
         color: Colors.grey,
           borderRadius: BorderRadius.only(
@@ -26,13 +29,25 @@ class Bubble extends StatelessWidget {
             bottomRight: Radius.circular(10),
           ),
       ),
-      child: Text(
-        this.message,
-        style: TextStyle(
-          fontSize: 20,
-        ),
+      child: Column(
+        children: [
+          Text(
+            message.msg,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          Text(lastMessageTime),
+        ],
       ),
     );
+  }
+
+  String get lastMessageTime {
+    final dateTime = DateTime.fromMicrosecondsSinceEpoch(message.time);
+    final String hour = '${dateTime.hour >= 12 ? '오후' : '오전'} ${dateTime.hour >= 13 ? dateTime.hour - 12 : dateTime.hour == 24 ? 0 : dateTime.hour}';
+    final String minute = dateTime.minute.toString();
+    return '$hour:$minute';
   }
 }
 

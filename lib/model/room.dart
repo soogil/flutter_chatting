@@ -6,7 +6,12 @@ class ChattingRoom extends BaseModel {
 
   ChattingRoom.fromJson(Map json) :
         roomId = json['roomId'],
-        message = Message(msg: json['lastMessage'], time: json['lastDateTime']),
+        message = Message(
+            userName: json['userName'],
+            fcmToken: json['userFcmToken'],
+            msg: json['lastMessage'],
+            time: json['lastDateTime']
+        ),
         user = User(name: json['userName'], email: json['userEmail']);
   final String roomId;
   final Message message;
@@ -18,6 +23,7 @@ class ChattingRoom extends BaseModel {
     'lastDateTime': message?.time ?? 0,
     'userName': user.name,
     'userEmail': user.email,
+    'userFcmToken': user.fcmToken,
   };
 
   String get name => user.name;

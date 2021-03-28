@@ -13,14 +13,12 @@ class ChatRepository {
       messages.addAll(List.generate(snapShot.values.toList().length,
               (index) => Message.fromJson(snapShot.values.toList()[index])));
     }
+    messages.sort((a, b) => b.time.compareTo(a.time));
+
     return messages;
   }
 
   Future sendMessage(ChattingRoom room) async {
-    print('sendMessage 1111');
-
-    print('sendMessage ${room.roomId}, ${room.message.toJson}');
-
     await chatProvider.updateRoom(room).then((_) {
       chatProvider.sendMessage(room.roomId, room.message);
     });

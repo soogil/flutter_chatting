@@ -5,6 +5,7 @@ import 'package:flutter_chatting/bloc/user/user_event.dart';
 import 'package:flutter_chatting/bloc/user/user_state.dart';
 import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/route_service.dart';
 import 'package:uuid/uuid.dart';
@@ -43,7 +44,16 @@ class UserListPageView extends StatelessWidget {
   _getUserItem(BuildContext context, User user) {
     return FlatButton(
       onPressed: () =>
-          RouteService.routeSlidePage(context, routeName: RouteNames.chattingScreenPage, params: ChattingRoom(roomId: Uuid().v4(), user: user, message: Message())),
+          RouteService.routeSlidePage(
+              context, routeName: RouteNames.chattingScreenPage,
+              params: ChattingRoom(
+                  roomId: Uuid().v4(),
+                  user: user,
+                  message: Message(
+                    fcmToken: SignInUser().fcmToken,
+                    userName: SignInUser().userName,
+                  )
+              )),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),

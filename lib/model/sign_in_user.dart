@@ -12,4 +12,5 @@ class SignInUser {
   User user;
 
   String get fcmToken => user.fcmToken;
+  String get userName => user.name;
 }

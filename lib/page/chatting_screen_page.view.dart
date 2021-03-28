@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_event.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_state.dart';
-import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/widget/bubble.dart';
 
 
@@ -50,8 +50,8 @@ class ChattingScreenPageView extends StatelessWidget {
               itemCount: state.messages.length,
               itemBuilder: (context, index) {
                 return Bubble(
-                  message: state.messages[index].msg,
-                  messageTime: DateTime.now(),
+                  message: state.messages[index],
+                  isMineMessage: state.messages[index].fcmToken == SignInUser().fcmToken,
                 );
               },
               separatorBuilder: (context, index) => Divider(height: 10),
@@ -85,9 +85,9 @@ class ChattingScreenPageView extends StatelessWidget {
   }
 
   ChattingRoom _setMessage() {
-    room.message.type = Type.right;
     room.message.msg = messageController.text;
     room.message.time = DateTime.now().microsecondsSinceEpoch;
+    messageController.clear();
     return room;
   }
 }
