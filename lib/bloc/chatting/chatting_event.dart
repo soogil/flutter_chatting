@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
 
 abstract class ChattingEvent extends Equatable {
   @override

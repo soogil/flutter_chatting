@@ -1,4 +1,4 @@
-import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/model/user.dart';
 
 class ChattingInitState<T extends BaseModel> {

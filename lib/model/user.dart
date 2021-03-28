@@ -1,28 +1,45 @@
 import 'package:equatable/equatable.dart';
 
-class User extends BaseModel {
-  User({this.name, this.email, this.password, this.fcmToken});
-
-  User.fromJson(Map json) :
+class RoomUser extends BaseModel {
+  RoomUser(this.userName, this.email, this.fcmToken);
+  RoomUser.fromJson(Map json) :
         email = json['email'],
-        password = json['password'],
-        name = json['name'],
+        userName = json['userName'],
         fcmToken = json['fcmToken'];
-
   final String email;
-  final String password;
-  final String name;
+  final String userName;
   final String fcmToken;
 
   Map<String, dynamic> get toJson => {
     'email': email,
-    'password': password,
-    'name': name,
+    'userName': userName,
     'fcmToken': fcmToken,
+  };
+  @override
+  List<Object> get props => [email, userName, fcmToken];
+}
+
+class User extends RoomUser {
+  User({
+    String name,
+    String email,
+    String fcmToken,
+    this.password
+  }) : super(name, email, fcmToken);
+
+  User.fromJson(Map json) :
+        password = json['password'],
+        super.fromJson(json);
+
+  final String password;
+
+  Map<String, dynamic> get toJson => {
+    'password': password,
+    ...super.toJson,
   };
 
   @override
-  List<Object> get props => [email, name];
+  List<Object> get props => [password, super.props];
 }
 
 abstract class BaseModel extends Equatable {

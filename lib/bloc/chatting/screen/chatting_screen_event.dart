@@ -1,26 +1,19 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_chatting/model/message.dart';
-import 'package:flutter_chatting/model/room.dart';
 
 abstract class ChattingScreenEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-class ChattingScreenInitEvent extends ChattingScreenEvent {
-  ChattingScreenInitEvent(this.roomId);
-  final String roomId;
-}
+class ChattingScreenInitEvent extends ChattingScreenEvent {}
 class SendMessageEvent extends ChattingScreenEvent {
-  SendMessageEvent(this.room);
+  SendMessageEvent(this.msg);
 
-  final ChattingRoom room;
+  final Message msg;
 
-
-  // MessageType get type => room.message.type;
-  int get time => room.message.time;
-  String get token => room.message.fcmToken;
-  String get message => room.lastMessage;
-  String get userName => room.message.userName;
+  int get time => msg.messageTime;
+  String get message => msg.message;
+  int get messageTime => msg.messageTime;
   @override
-  List<Object> get props => [room];
+  List<Object> get props => [msg];
 }

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_event.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_state.dart';
-import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/route_service.dart';
 
@@ -56,7 +56,7 @@ class ChattingRoomListPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      room.name,
+                      room.otherUserName,
                       style: TextStyle(
                         fontSize: 17,
                       ),

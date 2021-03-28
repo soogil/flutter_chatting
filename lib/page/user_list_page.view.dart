@@ -4,7 +4,7 @@ import 'package:flutter_chatting/bloc/user/user_bloc.dart';
 import 'package:flutter_chatting/bloc/user/user_event.dart';
 import 'package:flutter_chatting/bloc/user/user_state.dart';
 import 'package:flutter_chatting/model/message.dart';
-import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/route_service.dart';
@@ -12,6 +12,7 @@ import 'package:uuid/uuid.dart';
 
 
 class UserListPageView extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<UserBloc>(context).add(UserListEvent());
@@ -42,17 +43,15 @@ class UserListPageView extends StatelessWidget {
   }
 
   _getUserItem(BuildContext context, User user) {
+    final myInfo = SignInUser().user;
+
     return FlatButton(
       onPressed: () =>
           RouteService.routeSlidePage(
               context, routeName: RouteNames.chattingScreenPage,
               params: ChattingRoom(
                   roomId: Uuid().v4(),
-                  user: user,
-                  message: Message(
-                    fcmToken: SignInUser().fcmToken,
-                    userName: SignInUser().userName,
-                  )
+                  roomUsers: [user, myInfo],
               )),
       child: Container(
         alignment: Alignment.centerLeft,
@@ -61,7 +60,7 @@ class UserListPageView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user.name,
+                user.userName,
                 style: TextStyle(
                   fontSize: 17,
                 ),

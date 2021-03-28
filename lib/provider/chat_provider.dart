@@ -1,15 +1,17 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_chatting/model/message.dart';
-import 'package:flutter_chatting/model/room.dart';
-import 'package:flutter_chatting/model/sign_in_user.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
+import 'package:flutter_chatting/model/user.dart';
 
 class ChatProvider {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
 
-  Future _createChattingRoom(String roomId, String userFcmToken) async {
-    print('$roomId $userFcmToken');
-    await _database.reference().child('channelToken').child(SignInUser().fcmToken).update({'roomId': roomId});
-    await _database.reference().child('channelToken').child(userFcmToken).update({'roomId': roomId});
+  Future _createChattingRoom(String roomId, List<RoomUser> users) async {
+    print('_createChattingRoom $roomId');
+
+    await Future.forEach(users, (user) async {
+      _database.reference().child('channelToken').child(user.fcmToken).update({'roomId': roomId});
+    });
   }
 
   Future getMessageList(String roomId) async {
@@ -25,7 +27,7 @@ class ChatProvider {
 
   Future updateRoom(ChattingRoom room) async {
     try {
-      _createChattingRoom(room.roomId, room.user.fcmToken).then((value) async =>
+      _createChattingRoom(room.roomId, room.roomUsers).then((value) async =>
       await _database.reference().child('rooms').child(room.roomId).update(room.toJson));
     } catch (e) {
       throw Exception(e);

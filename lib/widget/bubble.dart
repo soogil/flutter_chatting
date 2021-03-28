@@ -32,7 +32,7 @@ class Bubble extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            message.msg,
+            message.message,
             style: TextStyle(
               fontSize: 20,
             ),
@@ -44,7 +44,7 @@ class Bubble extends StatelessWidget {
   }
 
   String get lastMessageTime {
-    final dateTime = DateTime.fromMicrosecondsSinceEpoch(message.time);
+    final dateTime = DateTime.fromMicrosecondsSinceEpoch(message.messageTime);
     final String hour = '${dateTime.hour >= 12 ? '오후' : '오전'} ${dateTime.hour >= 13 ? dateTime.hour - 12 : dateTime.hour == 24 ? 0 : dateTime.hour}';
     final String minute = dateTime.minute.toString();
     return '$hour:$minute';

@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_event.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_state.dart';
-import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
+import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/widget/bubble.dart';
 
@@ -16,7 +17,7 @@ class ChattingScreenPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ChattingScreenBloc>(context).add(ChattingScreenInitEvent(room.roomId));
+    BlocProvider.of<ChattingScreenBloc>(context).add(ChattingScreenInitEvent());
 
     return Scaffold(
       appBar: _getAppBar(),
@@ -74,8 +75,10 @@ class ChattingScreenPageView extends StatelessWidget {
             ),
             FlatButton(
               onPressed: () {
-                if(messageController.text != null)
+                if(messageController.text != null) {
                   BlocProvider.of<ChattingScreenBloc>(context).add(SendMessageEvent(_setMessage()));
+                  messageController.clear();
+                }
               },
               child: Icon(Icons.send),
             ),
@@ -84,10 +87,10 @@ class ChattingScreenPageView extends StatelessWidget {
     );
   }
 
-  ChattingRoom _setMessage() {
-    room.message.msg = messageController.text;
-    room.message.time = DateTime.now().microsecondsSinceEpoch;
-    messageController.clear();
-    return room;
-  }
+  Message _setMessage() => Message(
+      userName: SignInUser().userName,
+      fcmToken: SignInUser().fcmToken,
+      message: messageController.text,
+      messageTime: DateTime.now().microsecondsSinceEpoch,
+    );
 }

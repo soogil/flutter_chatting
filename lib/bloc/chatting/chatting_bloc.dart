@@ -16,9 +16,6 @@ class ChattingBloc extends Bloc<ChattingEvent, ChattingInitState> {
     if (event is ChattingInitEvent) {
       final rooms = await userRepository.getChattingRooms();
       yield ChattingRoomListState(rooms: rooms);
-    } else if (event is SendChattingEvent) {
-      await chatRepository.sendMessage(event.room);
-      yield SendMessageState();
     }
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter_chatting/model/message.dart';
-import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/provider/chat_provider.dart';
 
 class ChatRepository {
@@ -13,14 +13,16 @@ class ChatRepository {
       messages.addAll(List.generate(snapShot.values.toList().length,
               (index) => Message.fromJson(snapShot.values.toList()[index])));
     }
-    messages.sort((a, b) => b.time.compareTo(a.time));
+    messages.sort((a, b) => b.messageTime.compareTo(a.messageTime));
 
     return messages;
   }
 
-  Future sendMessage(ChattingRoom room) async {
+  Future sendMessage(ChattingRoom room, Message msg) async {
+    room.message = msg.message;
+    room.messageTime = msg.messageTime;
     await chatProvider.updateRoom(room).then((_) {
-      chatProvider.sendMessage(room.roomId, room.message);
+      chatProvider.sendMessage(room.roomId, msg);
     });
   }
 }

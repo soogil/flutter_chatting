@@ -16,7 +16,6 @@ void main() {
             BlocProvider(create: (_) => SignInBloc()),
             BlocProvider(create: (_) => ChattingBloc(ChattingInitState())),
             BlocProvider(create: (_) => UserBloc()),
-            BlocProvider(create: (_) => ChattingScreenBloc())
           ],
           child: MyApp()
       )

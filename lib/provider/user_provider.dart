@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_chatting/model/room.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/model/user.dart';
 

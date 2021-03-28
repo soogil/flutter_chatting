@@ -1,4 +1,4 @@
-import 'package:flutter_chatting/model/room.dart';
+import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/repository/base_repository.dart';
@@ -24,6 +24,7 @@ class UserRepository extends Repository {
       await Future.forEach(snapShot?.values, (element) async {
         final roomJson = await userProvider.getChattingRoomById(element);
 
+        print('getChattingRooms $roomJson');
         chattingRooms.add(ChattingRoom.fromJson(roomJson));
       });
     }
