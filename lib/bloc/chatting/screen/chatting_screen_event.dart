@@ -17,3 +17,8 @@ class SendMessageEvent extends ChattingScreenEvent {
   @override
   List<Object> get props => [msg];
 }
+class PushUpdateScreenEvent extends ChattingScreenEvent {
+  PushUpdateScreenEvent(this.msg);
+
+  final Message msg;
+}

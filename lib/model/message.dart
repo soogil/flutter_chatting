@@ -28,12 +28,17 @@ class Message extends BaseModel {
   int messageTime;
 
   Map<String, dynamic> get toJson => {
-        // 'type': type.index,
-        'message': message,
-        'messageTime': messageTime,
-        'userName': userName,
-        'fcmToken': fcmToken,
-      };
+    // 'type': type.index,
+    'message': message,
+    'messageTime': messageTime,
+    'userName': userName,
+    'fcmToken': fcmToken,
+  };
+
+  Map<String, dynamic> get toJsonMessage => {
+    'message': message,
+    'messageTime': messageTime,
+  };
 
   @override
   List<Object> get props => [ // type,

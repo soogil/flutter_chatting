@@ -23,3 +23,6 @@ class ChattingScreenInitState extends ChattingScreenState {
 class SendMessageState extends ChattingScreenState {
   SendMessageState({List<Message> messages, @required RoomInfo room}) : super(messages: messages, roomInfo: room);
 }
+class PushUpdateScreenState extends ChattingScreenState {
+  PushUpdateScreenState({List<Message> messages, @required RoomInfo room}) : super(messages: messages, roomInfo: room);
+}

@@ -4,7 +4,9 @@ import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_bloc.dart'
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_event.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_state.dart';
 import 'package:flutter_chatting/model/message.dart';
+import 'package:flutter_chatting/model/notifycation.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
+import 'package:flutter_chatting/service/push_service.dart';
 import 'package:flutter_chatting/widget/bubble.dart';
 
 
@@ -14,6 +16,10 @@ class ChattingScreenPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<ChattingScreenBloc>(context).add(ChattingScreenInitEvent());
+    MessageStream.instance.subscription.onData((data) {
+      final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
+      BlocProvider.of<ChattingScreenBloc>(context).add(PushUpdateScreenEvent(pushMessage.messageUser));
+    });
 
     return Scaffold(
       appBar: _getAppBar(),

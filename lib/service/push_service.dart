@@ -48,7 +48,7 @@ class PushService {
 
   Future<bool> sendFcmMessage(String message, String fcmToken, {Map<String, dynamic> data}) async {
     try {
-      final Map<String, dynamic> chattingRoom = data != null ? {"chattingRoom": data} : {};
+      final Map<String, dynamic> pushMessage = data ?? {};
       final requestMessage = {
         "notification": {
           "body": "$message",
@@ -59,7 +59,7 @@ class PushService {
           "click_action": "FLUTTER_NOTIFICATION_CLICK",
           "id": "1",
           "status": "done",
-          ...chattingRoom
+          ...pushMessage
         },
         "to": "$fcmToken"
       };
@@ -98,25 +98,24 @@ class MessageStream {
   factory MessageStream() => instance;
 
   MessageStream._internal() {
-    _subscription = notificationsStream.listen((event) => event);
+    _chattingRoomSubscription = notificationsStream.listen((event) => event);
   }
 
-  StreamController<dynamic> _messageStreamController = StreamController<dynamic>.broadcast();
-  StreamSubscription _subscription;
+  StreamController<dynamic> _chattingRoomStreamController = StreamController<dynamic>.broadcast();
+  StreamSubscription _chattingRoomSubscription;
 
   dynamic message;
 
   void onMessage(dynamic message) {
     this.message = message;
-    print('onMessage $message');
-    _messageStreamController.sink.add(message);
+    _chattingRoomStreamController.sink.add(message);
   }
 
   void dispose() {
-    _subscription.cancel();
-    _messageStreamController?.close();
+    _chattingRoomSubscription.cancel();
+    _chattingRoomStreamController?.close();
   }
 
-  StreamSubscription get subscription => _subscription;
-  Stream<dynamic> get notificationsStream  => _messageStreamController.stream;
+  StreamSubscription get subscription => _chattingRoomSubscription;
+  Stream<dynamic> get notificationsStream  => _chattingRoomStreamController.stream;
 }

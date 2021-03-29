@@ -10,8 +10,8 @@ class ChattingRoom extends BaseModel {
         messageTime = json['messageTime'];
 
   final RoomInfo roomInfo;
-  String message;
-  int messageTime;
+  final String message;
+  final int messageTime;
 
   Map<String, dynamic> get toJson => {
     ...roomInfo.toJson,
