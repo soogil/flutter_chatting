@@ -40,10 +40,7 @@ class PushService {
   }
 
   Future<String> _getToken() async {
-    return await firebaseMessaging.getToken().then((token) {
-      _token = token;
-      return token;
-    });
+    return _token = await firebaseMessaging.getToken().then((token) => token);
   }
 
   Future<bool> sendFcmMessage(String message, String fcmToken) async {
@@ -53,27 +50,23 @@ class PushService {
         "Authorization": "key=$serverKey",
       };
       final requestMessage = {
-        "registration_ids" : fcmToken,
-        "collapse_key" : "type_a",
-        "notification" : {
-          "title": 'NewTextTitle',
-          "body" : message,
-        }
+        "notification": {
+          "body": "$message",
+          "title": "새로운 메세지가 왔습니다."
+        },
+        "priority": "high",
+        "data": {
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+          "id": "1",
+          "status": "done"
+        },
+        "to": "$fcmToken"
       };
-      // final requestMessage = {
-      //   "notification": {
-      //     "title": title,
-      //     "text": message,
-      //     "sound": "default",
-      //     "color": "#990000",
-      //   },
-      //   "priority": "high",
-      //   "to": "/topics/all",
-      // };
+
       List<int> requestBodyData = [];
       dynamic requestBody;
 
-      HttpClientRequest request = await HttpClient().openUrl('POST', Uri.parse(fcmMessageUrl));
+      HttpClientRequest request = await HttpClient().postUrl(Uri.parse(fcmMessageUrl));
 
       header.forEach((header, value) {
         request.headers.add(header, value);
@@ -85,8 +78,9 @@ class PushService {
       request.add(requestBodyData);
 
       HttpClientResponse response = await request.close().timeout(timeoutDuration);
-
-      print('sendFcmMessage $response');
+      response.transform(utf8.decoder).listen((contents) {
+        print('sendFcmMessage $contents');
+      });
       return true;
     } catch (e) {
       print('sendFcmMessage Error $e');

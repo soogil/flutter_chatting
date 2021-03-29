@@ -21,12 +21,12 @@ class ChattingScreenBloc extends Bloc<ChattingScreenEvent, ChattingScreenState> 
       final messages = List<Message>.from(state.messages);
       final message = Message(
           // type: event.type,
-          fcmToken: state.userToken,
-          userName: state.userName,
+          fcmToken: state.myToken,
+          userName: state.myName,
           messageTime: event.time,
           message: event.message
       );
-      final isSuccess = PushService().sendFcmMessage(message.message, message.fcmToken);
+      final isSuccess = PushService().sendFcmMessage(message.message, state.otherToken);
 
       print('SendMessageEvent ${state.room.toJson}');
       messages.insert(0, message);

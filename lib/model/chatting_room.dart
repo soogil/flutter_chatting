@@ -22,6 +22,7 @@ class ChattingRoom extends BaseModel {
   };
 
   RoomUser get myInfo => roomUsers.firstWhere((element) => element.fcmToken == SignInUser().fcmToken);
+  RoomUser get otherInfo => roomUsers.firstWhere((element) => element.fcmToken != SignInUser().fcmToken);
   String get otherUserName => roomUsers.firstWhere((element) => element.fcmToken != SignInUser().fcmToken).userName;
   String get lastMessage => message;
   String get lastMessageTime {

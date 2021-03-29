@@ -10,8 +10,9 @@ abstract class ChattingScreenState extends Equatable {
   final ChattingRoom room;
 
   String get roomId => room.roomId;
-  String get userToken => myInfo.fcmToken;
-  String get userName => myInfo.userName;
+  String get myToken => myInfo.fcmToken;
+  String get myName => myInfo.userName;
+  String get otherToken => room.otherInfo.fcmToken;
   RoomUser get myInfo => room.myInfo;
   @override
   List<Object> get props => [messages];
