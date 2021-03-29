@@ -49,10 +49,11 @@ class UserListPageView extends StatelessWidget {
       onPressed: () =>
           RouteService.routeSlidePage(
               context, routeName: RouteNames.chattingScreenPage,
-              params: ChattingRoom(
-                  roomId: Uuid().v4(),
-                  roomUsers: [user, myInfo],
-              )),
+              params: RoomInfo(
+                roomId: Uuid().v4(),
+                roomUsers: [user, myInfo],
+              )
+          ),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),

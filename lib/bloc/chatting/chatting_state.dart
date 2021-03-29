@@ -1,12 +1,13 @@
 import 'package:flutter_chatting/model/chatting_room.dart';
-import 'package:flutter_chatting/model/user.dart';
 
-class ChattingInitState<T extends BaseModel> {
-  ChattingInitState({List<T> items}) : items = items ?? List();
-  final List<T> items;
+class ChattingInitState {
+  ChattingInitState({List<ChattingRoom> items}) : items = items ?? List();
+  final List<ChattingRoom> items;
 }
-class ChattingRoomListState extends ChattingInitState<ChattingRoom> {
-  ChattingRoomListState({List<ChattingRoom> rooms}) : super(items: rooms);
+class ChattingRoomListState extends ChattingInitState {
+  ChattingRoomListState(List<ChattingRoom> rooms) : super(items: rooms);
 }
-class SendMessageState extends ChattingInitState {
+
+class PushUpdateState extends ChattingInitState {
+  PushUpdateState(List<ChattingRoom> rooms) : super(items: rooms);
 }

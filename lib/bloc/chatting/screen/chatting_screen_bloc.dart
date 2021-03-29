@@ -15,22 +15,17 @@ class ChattingScreenBloc extends Bloc<ChattingScreenEvent, ChattingScreenState> 
     print('chat mapEventToState $event');
     if (event is ChattingScreenInitEvent) {
       final messages = await chatRepository.getMessageList(state.roomId);
-      yield ChattingScreenInitState(messages: messages, room: state.room);
+      yield ChattingScreenInitState(messages: messages, room: state.roomInfo);
     } else if (event is SendMessageEvent) {
-      await chatRepository.sendMessage(state.room, event.msg);
+      await chatRepository.sendMessage(state.roomInfo, event.msg);
       final messages = List<Message>.from(state.messages);
-      final message = Message(
-          // type: event.type,
-          fcmToken: state.myToken,
-          userName: state.myName,
-          messageTime: event.time,
-          message: event.message
-      );
-      final isSuccess = PushService().sendFcmMessage(message.message, state.otherToken);
+      PushService().sendFcmMessage(event.msg.message, state.otherToken, data: {
+        ...state.roomInfo.toJson
+        ,...event.msg.toJson
+      });
 
-      print('SendMessageEvent ${state.room.toJson}');
-      messages.insert(0, message);
-      yield SendMessageState(messages: messages, room: state.room);
+      messages.insert(0, event.msg);
+      yield SendMessageState(messages: messages, room: state.roomInfo);
     }
   }
 }

@@ -5,21 +5,21 @@ import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/user.dart';
 
 abstract class ChattingScreenState extends Equatable {
-  ChattingScreenState({List<Message> messages, @required this.room}) : messages = messages ?? List();
+  ChattingScreenState({List<Message> messages, @required this.roomInfo}) : messages = messages ?? List();
   final List<Message> messages;
-  final ChattingRoom room;
+  final RoomInfo roomInfo;
 
-  String get roomId => room.roomId;
+  String get roomId => roomInfo.roomId;
   String get myToken => myInfo.fcmToken;
   String get myName => myInfo.userName;
-  String get otherToken => room.otherInfo.fcmToken;
-  RoomUser get myInfo => room.myInfo;
+  String get otherToken => roomInfo.otherInfo.fcmToken;
+  RoomUser get myInfo => roomInfo.myInfo;
   @override
   List<Object> get props => [messages];
 }
 class ChattingScreenInitState extends ChattingScreenState {
-  ChattingScreenInitState({List<Message> messages, @required ChattingRoom room}) : super(messages: messages, room: room);
+  ChattingScreenInitState({List<Message> messages, @required RoomInfo room}) : super(messages: messages, roomInfo: room);
 }
 class SendMessageState extends ChattingScreenState {
-  SendMessageState({List<Message> messages, @required ChattingRoom room}) : super(messages: messages, room: room);
+  SendMessageState({List<Message> messages, @required RoomInfo room}) : super(messages: messages, roomInfo: room);
 }

@@ -3,16 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_event.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_state.dart';
-import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/widget/bubble.dart';
 
 
 class ChattingScreenPageView extends StatelessWidget {
-  ChattingScreenPageView(this.room);
-
-  final ChattingRoom room;
   final TextEditingController messageController = TextEditingController();
 
   @override
@@ -55,7 +51,7 @@ class ChattingScreenPageView extends StatelessWidget {
                   isMineMessage: state.messages[index].fcmToken == SignInUser().fcmToken,
                 );
               },
-              separatorBuilder: (context, index) => Divider(height: 10),
+              separatorBuilder: (context, index) => Divider(color: Colors.transparent,height: 10),
             ),
           ),
         );

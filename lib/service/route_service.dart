@@ -17,7 +17,7 @@ class RouteService {
        case RouteNames.chattingScreenPage:
          return PageRouteSlider(page: BlocProvider(
            create: (_) => ChattingScreenBloc(ChattingScreenInitState(room: _params[RouteNames.chattingScreenPage])),
-             child: ChattingScreenPageView(_params[RouteNames.chattingScreenPage])));
+             child: ChattingScreenPageView()));
        case RouteNames.userListPage:
          return PageRouteSlider(page: UserListPageView());
      }

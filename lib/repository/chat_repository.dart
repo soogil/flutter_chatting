@@ -18,11 +18,13 @@ class ChatRepository {
     return messages;
   }
 
-  Future sendMessage(ChattingRoom room, Message msg) async {
-    room.message = msg.message;
-    room.messageTime = msg.messageTime;
-    await chatProvider.updateRoom(room).then((_) {
-      chatProvider.sendMessage(room.roomId, msg);
+  Future sendMessage(RoomInfo roomInfo, Message msg) async {
+    Map<String, dynamic> body = {
+      ...roomInfo.toJson
+      ,...msg.toJson
+    };
+    await chatProvider.updateRoom(roomInfo, body).then((_) {
+      chatProvider.sendMessage(roomInfo.roomId, msg);
     });
   }
 }

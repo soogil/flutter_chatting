@@ -4,15 +4,32 @@ import 'package:flutter_chatting/bloc/chatting/chatting_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_event.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_state.dart';
 import 'package:flutter_chatting/model/chatting_room.dart';
+import 'package:flutter_chatting/model/notifycation.dart';
 import 'package:flutter_chatting/model/user.dart';
+import 'package:flutter_chatting/service/push_service.dart';
 import 'package:flutter_chatting/service/route_service.dart';
 
 
-class ChattingRoomListPage extends StatelessWidget {
+class ChattingRoomListPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _ChattingRoomListPageState createState() => _ChattingRoomListPageState();
+}
+
+class _ChattingRoomListPageState extends State<ChattingRoomListPage> {
+
+  @override
+  void initState() {
+    super.initState();
     BlocProvider.of<ChattingBloc>(context).add(ChattingInitEvent());
 
+    MessageStream.instance.subscription.onData((data) {
+      final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
+      BlocProvider.of<ChattingBloc>(context).add(PushUpdateEvent(pushMessage.chattingRoom));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: _getAppBar(),
       body: _getBody(context),
@@ -45,7 +62,7 @@ class ChattingRoomListPage extends StatelessWidget {
     return FlatButton(
       onPressed: () =>
           RouteService.routeSlidePage(
-              context, routeName: RouteNames.chattingScreenPage, params: room),
+              context, routeName: RouteNames.chattingScreenPage, params: room.roomInfo),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),

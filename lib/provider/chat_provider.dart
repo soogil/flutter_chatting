@@ -25,10 +25,10 @@ class ChatProvider {
     }
   }
 
-  Future updateRoom(ChattingRoom room) async {
+  Future updateRoom(RoomInfo roomInfo, Map<String, dynamic> body) async {
     try {
-      _createChattingRoom(room.roomId, room.roomUsers).then((value) async =>
-      await _database.reference().child('rooms').child(room.roomId).update(room.toJson));
+      _createChattingRoom(roomInfo.roomId, roomInfo.roomUsers).then((value) async =>
+      await _database.reference().child('rooms').child(roomInfo.roomId).update(body));
     } catch (e) {
       throw Exception(e);
     }
