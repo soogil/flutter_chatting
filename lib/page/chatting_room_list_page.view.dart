@@ -8,29 +8,50 @@ import 'package:flutter_chatting/model/notifycation.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/push_service.dart';
 import 'package:flutter_chatting/service/route_service.dart';
+import 'package:flutter_chatting/service/stream_provider.dart';
 
 
 class ChattingRoomListPage extends StatefulWidget {
+  const ChattingRoomListPage();
+
   @override
   _ChattingRoomListPageState createState() => _ChattingRoomListPageState();
 }
 
-class _ChattingRoomListPageState extends State<ChattingRoomListPage> {
+class _ChattingRoomListPageState extends State<ChattingRoomListPage> with StreamProvider {
+
+  final GlobalKey _scaffoldKey = GlobalKey();
+
+  void _chattingRoomInit() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<ChattingBloc>(_scaffoldKey.currentContext).add(ChattingInitEvent());
+
+      final pushMessage = MessageStream.instance.subScribe().listen((data) {
+        final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
+        BlocProvider.of<ChattingBloc>(_scaffoldKey.currentContext).add(
+            PushUpdateEvent(pushMessage.chattingRoom));
+      });
+      addStream('pushMessage', pushMessage);
+    });
+  }
+
 
   @override
   void initState() {
+    _chattingRoomInit();
     super.initState();
-    BlocProvider.of<ChattingBloc>(context).add(ChattingInitEvent());
+  }
 
-    MessageStream.instance.subscription.onData((data) {
-      final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
-      BlocProvider.of<ChattingBloc>(context).add(PushUpdateEvent(pushMessage.chattingRoom));
-    });
+  @override
+  void dispose() {
+    removeStream('pushMessage');
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: _getAppBar(),
       body: _getBody(context),
       floatingActionButton: _getUserListButton(context),

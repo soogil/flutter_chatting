@@ -51,8 +51,8 @@ class PushService {
       final Map<String, dynamic> pushMessage = data ?? {};
       final requestMessage = {
         "notification": {
+          "title": "새로운 메세지가 왔습니다.",
           "body": "$message",
-          "title": "새로운 메세지가 왔습니다."
         },
         "priority": "high",
         "data": {
@@ -97,12 +97,9 @@ class MessageStream {
  
   factory MessageStream() => instance;
 
-  MessageStream._internal() {
-    _chattingRoomSubscription = notificationsStream.listen((event) => event);
-  }
+  MessageStream._internal();
 
   StreamController<dynamic> _chattingRoomStreamController = StreamController<dynamic>.broadcast();
-  StreamSubscription _chattingRoomSubscription;
 
   dynamic message;
 
@@ -112,10 +109,11 @@ class MessageStream {
   }
 
   void dispose() {
-    _chattingRoomSubscription.cancel();
     _chattingRoomStreamController?.close();
   }
 
-  StreamSubscription get subscription => _chattingRoomSubscription;
-  Stream<dynamic> get notificationsStream  => _chattingRoomStreamController.stream;
+  StreamTransformer _streamTransform() =>
+      StreamTransformer.fromHandlers(handleData: (data, sink) async => sink.add(data));
+
+  Stream subScribe() => _chattingRoomStreamController.stream.transform(_streamTransform()).where((data) => data != null);
 }

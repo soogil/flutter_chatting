@@ -7,8 +7,6 @@ class ChatProvider {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
 
   Future _createChattingRoom(String roomId, List<RoomUser> users) async {
-    print('_createChattingRoom $roomId');
-
     await Future.forEach(users, (user) async {
       _database.reference().child('channelToken').child(user.fcmToken).update({'roomId': roomId});
     });

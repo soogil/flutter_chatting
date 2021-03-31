@@ -7,21 +7,47 @@ import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/notifycation.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/service/push_service.dart';
+import 'package:flutter_chatting/service/stream_provider.dart';
 import 'package:flutter_chatting/widget/bubble.dart';
 
 
-class ChattingScreenPageView extends StatelessWidget {
+class ChattingScreenPageView extends StatefulWidget {
+  @override
+  _ChattingScreenPageViewState createState() => _ChattingScreenPageViewState();
+}
+
+class _ChattingScreenPageViewState extends State<ChattingScreenPageView> with StreamProvider {
   final TextEditingController messageController = TextEditingController();
+
+  final GlobalKey _scaffoldKey = GlobalKey();
+
+  void _chattingScreenInit() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<ChattingScreenBloc>(_scaffoldKey.currentContext).add(ChattingScreenInitEvent());
+      final screenMessage = MessageStream.instance.subScribe().listen((data) {
+        final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
+        BlocProvider.of<ChattingScreenBloc>(_scaffoldKey.currentContext).add(PushUpdateScreenEvent(pushMessage.messageUser));
+      });
+      addStream('screenMessage', screenMessage);
+    });
+  }
+
+  @override
+  void initState() {
+    _chattingScreenInit();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    removeStream('screenMessage');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ChattingScreenBloc>(context).add(ChattingScreenInitEvent());
-    MessageStream.instance.subscription.onData((data) {
-      final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
-      BlocProvider.of<ChattingScreenBloc>(context).add(PushUpdateScreenEvent(pushMessage.messageUser));
-    });
-
     return Scaffold(
+      key: _scaffoldKey,
       appBar: _getAppBar(),
       body: _getBody(context),
     );

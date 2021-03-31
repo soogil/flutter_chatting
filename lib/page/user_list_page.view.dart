@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/user/user_bloc.dart';
 import 'package:flutter_chatting/bloc/user/user_event.dart';
 import 'package:flutter_chatting/bloc/user/user_state.dart';
-import 'package:flutter_chatting/model/message.dart';
 import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/model/user.dart';
