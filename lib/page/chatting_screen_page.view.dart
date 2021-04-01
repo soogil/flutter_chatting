@@ -63,7 +63,12 @@ class _ChattingScreenPageViewState extends State<ChattingScreenPageView> with St
   }
 
   Widget _getAppBar() {
-    return AppBar();
+    return AppBar(
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () => _popScreen(),
+      ),
+    );
   }
 
   Widget _getBody(BuildContext context) {
@@ -130,4 +135,11 @@ class _ChattingScreenPageViewState extends State<ChattingScreenPageView> with St
       message: messageController.text,
       messageTime: DateTime.now().microsecondsSinceEpoch,
     );
+
+  _popScreen() {
+    Navigator.pop(context,
+        BlocProvider
+            .of<ChattingScreenBloc>(context)
+            .state.chattingRoomToJson);
+  }
 }
