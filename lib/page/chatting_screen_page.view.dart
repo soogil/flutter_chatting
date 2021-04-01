@@ -24,7 +24,7 @@ class _ChattingScreenPageViewState extends State<ChattingScreenPageView> with St
   void _chattingScreenInit() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<ChattingScreenBloc>(_scaffoldKey.currentContext).add(ChattingScreenInitEvent());
-      final screenMessage = MessageStream.instance.subScribe().listen((data) {
+      final screenMessage = MessageStream.instance.subScribeOnMessage().listen((data) {
         final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
         BlocProvider.of<ChattingScreenBloc>(_scaffoldKey.currentContext).add(PushUpdateScreenEvent(pushMessage.messageUser));
       });
@@ -46,10 +46,19 @@ class _ChattingScreenPageViewState extends State<ChattingScreenPageView> with St
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: _getAppBar(),
-      body: _getBody(context),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context,
+            BlocProvider
+                .of<ChattingScreenBloc>(context)
+                .state.chattingRoomToJson);
+        return true;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: _getAppBar(),
+        body: _getBody(context),
+      ),
     );
   }
 

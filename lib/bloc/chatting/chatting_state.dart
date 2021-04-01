@@ -7,7 +7,3 @@ class ChattingInitState {
 class ChattingRoomListState extends ChattingInitState {
   ChattingRoomListState(List<ChattingRoom> rooms) : super(items: rooms);
 }
-
-class PushUpdateState extends ChattingInitState {
-  PushUpdateState(List<ChattingRoom> rooms) : super(items: rooms);
-}

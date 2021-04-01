@@ -7,6 +7,11 @@ class PushUpdateEvent extends ChattingEvent {
   PushUpdateEvent(this.chattingRoom);
 
   final ChattingRoom chattingRoom;
+  String get roomId => chattingRoom.roomId;
+}
+class ChattingRoomsUpdateEvent extends ChattingEvent {
+  ChattingRoomsUpdateEvent(this.chattingRoom);
 
+  final ChattingRoom chattingRoom;
   String get roomId => chattingRoom.roomId;
 }

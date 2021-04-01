@@ -26,7 +26,7 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<ChattingBloc>(_scaffoldKey.currentContext).add(ChattingInitEvent());
 
-      final pushMessage = MessageStream.instance.subScribe().listen((data) {
+      final pushMessage = MessageStream.instance.subScribeOnMessage().listen((data) {
         final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
         BlocProvider.of<ChattingBloc>(_scaffoldKey.currentContext).add(
             PushUpdateEvent(pushMessage.chattingRoom));
@@ -83,7 +83,16 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
     return FlatButton(
       onPressed: () =>
           RouteService.routeSlidePage(
-              context, routeName: RouteNames.chattingScreenPage, params: room.roomInfo),
+              context,
+              routeName: RouteNames.chattingScreenPage,
+              params: room.roomInfo).then((data) {
+
+                if(data == null) return;
+
+                print('routeSlidePage $data');
+                BlocProvider.of<ChattingBloc>(context).add(
+                    ChattingRoomsUpdateEvent(ChattingRoom.fromJson(data)));
+              }),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),

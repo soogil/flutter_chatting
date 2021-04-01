@@ -115,5 +115,5 @@ class MessageStream {
   StreamTransformer _streamTransform() =>
       StreamTransformer.fromHandlers(handleData: (data, sink) async => sink.add(data));
 
-  Stream subScribe() => _chattingRoomStreamController.stream.transform(_streamTransform()).where((data) => data != null);
+  Stream subScribeOnMessage() => _chattingRoomStreamController.stream.transform(_streamTransform()).where((data) => data != null);
 }

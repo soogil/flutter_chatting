@@ -18,6 +18,10 @@ class ChattingBloc extends Bloc<ChattingEvent, ChattingInitState> {
       final itemIndex = state.items.indexWhere((element) => element.roomId == event.roomId);
       state.items[itemIndex] = event.chattingRoom;
       yield ChattingRoomListState(state.items);
+    } else if (event is ChattingRoomsUpdateEvent) {
+      final itemIndex = state.items.indexWhere((element) => element.roomId == event.roomId);
+      state.items[itemIndex] = event.chattingRoom;
+      yield ChattingRoomListState(state.items);
     }
   }
 }
