@@ -13,3 +13,8 @@ Firebase message, realtime database 사용
 - rooms - roomId List - roomInfo(fcmToken, message, messageTime, roomUsers, userName)
 - users - user List - User(email, fcmToken, password, userName)
 
+
+### TODO List
+- user list 화면에서 채팅방을 처음 생성 후 채팅방 목록으로 왔을때 다시 호출해야됨
+- user list 화면에서 chatting 화면으로 넘어간뒤 채팅 후에 채팅방 목록으로 왔을때 업데이트
+- 현재 fcm으로 되어있는 코드 추후에 soket으로 
