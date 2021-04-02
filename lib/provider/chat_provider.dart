@@ -8,7 +8,20 @@ class ChatProvider {
 
   Future _createChattingRoom(String roomId, List<RoomUser> users) async {
     await Future.forEach(users, (user) async {
-      _database.reference().child('channelToken').child(user.fcmToken).update({'roomId': roomId});
+      _database.reference()
+          .child('channelToken')
+          .child(user.fcmToken)
+          .child('roomIds').once().then((snapShot) {
+            final List roomIds = snapShot.value == null
+                ? [] : List<String>.from(snapShot.value);
+
+            if (!roomIds.contains(roomId)) roomIds.add(roomId);
+
+            _database.reference()
+                .child('channelToken')
+                .child(user.fcmToken)
+                .update({'roomIds': roomIds});
+      });
     });
   }
 
@@ -26,6 +39,7 @@ class ChatProvider {
   Future updateRoom(RoomInfo roomInfo, Map<String, dynamic> body) async {
     try {
       _createChattingRoom(roomInfo.roomId, roomInfo.roomUsers).then((value) async =>
+     // print(''));
       await _database.reference().child('rooms').child(roomInfo.roomId).update(body));
     } catch (e) {
       throw Exception(e);

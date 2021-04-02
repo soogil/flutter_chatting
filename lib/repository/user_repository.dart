@@ -17,17 +17,19 @@ class UserRepository extends Repository {
   }
 
   Future<List<ChattingRoom>> getChattingRooms() async {
-    final Map snapShot = await userProvider.getChattingRoomIds();
+    final List roomIds = await userProvider.getChattingRoomIds();
     final List<ChattingRoom> chattingRooms = [];
 
-    if(snapShot != null) {
-      await Future.forEach(snapShot?.values, (element) async {
-        final roomJson = await userProvider.getChattingRoomById(element);
+    await Future.forEach(roomIds, (roomId) async {
+      final roomJson = await userProvider.getChattingRoomById(roomId);
 
-        print('getChattingRooms $roomJson');
-        chattingRooms.add(ChattingRoom.fromJson(roomJson));
-      });
-    }
+      print('getChattingRooms $roomJson');
+      chattingRooms.add(ChattingRoom.fromJson(roomJson));
+    });
+
     return chattingRooms;
   }
+  
+  Future getChattingRoomInfo(String myToken, String otherUserToken) async =>
+      await userProvider.getChattingRoomInfo(myToken, otherUserToken);
 }

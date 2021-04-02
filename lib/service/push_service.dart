@@ -78,10 +78,11 @@ class PushService {
 
       request.add(requestBodyData);
 
-      HttpClientResponse response = await request.close().timeout(timeoutDuration);
-      response.transform(utf8.decoder).listen((contents) {
-        print('sendFcmMessage $contents');
-      });
+      // HttpClientResponse response =
+      await request.close().timeout(timeoutDuration);
+      // response.transform(utf8.decoder).listen((contents) {
+      //   print('sendFcmMessage $contents');
+      // });
       return true;
     } catch (e) {
       print('sendFcmMessage Error $e');

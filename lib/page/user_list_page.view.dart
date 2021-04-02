@@ -7,7 +7,6 @@ import 'package:flutter_chatting/model/chatting_room.dart';
 import 'package:flutter_chatting/model/sign_in_user.dart';
 import 'package:flutter_chatting/model/user.dart';
 import 'package:flutter_chatting/service/route_service.dart';
-import 'package:uuid/uuid.dart';
 
 
 class UserListPageView extends StatelessWidget {
@@ -30,7 +29,21 @@ class UserListPageView extends StatelessWidget {
 
   Widget _getBody(BuildContext context) {
     return BlocBuilder<UserBloc, UserState>(
-        builder: (context, state) => _getUserList(context, state.items));
+        builder: (context, state) {
+          if (state is CreateChattingRoomState) {
+            _afterLayoutFunction(
+                function: () =>
+                    RouteService.routeSlidePage(
+                        context, routeName: RouteNames.chattingScreenPage,
+                        params: RoomInfo(
+                          roomId: state.roomId,
+                          roomUsers: state.chattingRoomUsers,
+                        ))
+            );
+          }
+
+          return _getUserList(context, state.items);
+        });
   }
 
   _getUserList(BuildContext contextList, List<BaseModel> models) {
@@ -46,13 +59,7 @@ class UserListPageView extends StatelessWidget {
 
     return FlatButton(
       onPressed: () =>
-          RouteService.routeSlidePage(
-              context, routeName: RouteNames.chattingScreenPage,
-              params: RoomInfo(
-                roomId: Uuid().v4(),
-                roomUsers: [user, myInfo],
-              )
-          ),
+        BlocProvider.of<UserBloc>(context).add(GetChattingRoomEvent(user, myInfo)),
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),
@@ -76,5 +83,11 @@ class UserListPageView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _afterLayoutFunction({@required Function function}) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      function();
+    });
   }
 }

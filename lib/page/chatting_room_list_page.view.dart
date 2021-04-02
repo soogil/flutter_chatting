@@ -38,6 +38,7 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
 
   @override
   void initState() {
+    print('ChattingRoomListPage initState');
     _chattingRoomInit();
     super.initState();
   }
@@ -50,6 +51,8 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
 
   @override
   Widget build(BuildContext context) {
+    print('ChattingRoomListPage build');
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: _getAppBar(),

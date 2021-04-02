@@ -33,6 +33,7 @@ class UserProvider {
   Future<Map> getUsers() async {
     try {
       return await _database.reference().child('users').once().then((DataSnapshot snapShot) {
+        print(snapShot.value);
         return snapShot.value;
       });
     } catch(e) {
@@ -41,13 +42,49 @@ class UserProvider {
   }
 
   Future getChattingRoomIds() async {
-    return await _database.reference().child('channelToken').child(SignInUser().fcmToken).once().then((snapShot) => snapShot.value);
+    return await _database.reference()
+        .child('channelToken')
+        .child(SignInUser().fcmToken)
+        .once()
+        .then((snapShot) => snapShot?.value == null ? [] : snapShot?.value['roomIds']);
   }
 
   Future getChattingRoomById(String roomId) async {
     try {
       return await _database.reference().child('rooms').child(roomId).once().then((snapShot) => snapShot.value);
     } catch(e) {
+      throw Exception(e);
+    }
+  }
+
+  Future getChattingRoomInfo(String myToken, String otherUserToken) async {
+    try {
+      final List myRoomIds = await _getUserRoomIds(myToken);
+      final List otherUserRoomIds = await _getUserRoomIds(otherUserToken);
+
+      String chattingRoomId;
+      await Future.forEach(myRoomIds, (roomId) {
+        otherUserRoomIds.forEach((otherRoomId) {
+          if(roomId == otherRoomId) {
+            chattingRoomId = roomId;
+          }
+        });
+      });
+      return chattingRoomId;
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
+
+  Future _getUserRoomIds(String token) async {
+    try {
+      return await _database.reference()
+          .child('channelToken')
+          .child(token)
+          .once()
+          .then((snapShot) => snapShot.value == null ? []
+          : snapShot.value['roomIds']);
+    } catch (e) {
       throw Exception(e);
     }
   }

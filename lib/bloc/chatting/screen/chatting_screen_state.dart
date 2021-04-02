@@ -14,13 +14,13 @@ abstract class ChattingScreenState extends Equatable {
   String get myName => myInfo.userName;
   String get otherToken => roomInfo.otherInfo.fcmToken;
   RoomUser get myInfo => roomInfo.myInfo;
-  Map<String, dynamic> get chattingRoomToJson => {
+  Map<String, dynamic> get chattingRoomToJson => lastMessage != null ? {
     ...roomInfo.toJson,
     ...{
       'message': lastMessage.message,
       'messageTime': lastMessage.messageTime,
     },
-  };
+  } : {};
   Message get lastMessage => messages?.first;
   @override
   List<Object> get props => [messages];

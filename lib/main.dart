@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/chatting_bloc.dart';
-import 'package:flutter_chatting/bloc/chatting/chatting_state.dart';
-import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_bloc.dart';
 import 'package:flutter_chatting/bloc/signIn/sign_in_bloc.dart';
 import 'package:flutter_chatting/bloc/user/user_bloc.dart';
 import 'package:flutter_chatting/page/signin_page.view.dart';
@@ -14,7 +12,7 @@ void main() {
       MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => SignInBloc()),
-            BlocProvider(create: (_) => ChattingBloc(ChattingInitState())),
+            BlocProvider(create: (_) => ChattingBloc()),
             BlocProvider(create: (_) => UserBloc()),
           ],
           child: MyApp()

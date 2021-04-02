@@ -25,7 +25,8 @@ class ChattingScreenBloc extends Bloc<ChattingScreenEvent, ChattingScreenState> 
           "message": event.msg.toJson
         }
       };
-      PushService().sendFcmMessage(event.msg.message, state.otherToken, data: data);
+      print('SendMessageEvent ${state.otherToken}');
+      PushService().sendFcmMessage(event.message, state.otherToken, data: data);
       messages.insert(0, event.msg);
       yield SendMessageState(messages: messages, room: state.roomInfo);
     } else if (event is PushUpdateScreenEvent) {

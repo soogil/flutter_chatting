@@ -4,7 +4,7 @@ import 'package:flutter_chatting/bloc/chatting/chatting_state.dart';
 import 'package:flutter_chatting/repository/user_repository.dart';
 
 class ChattingBloc extends Bloc<ChattingEvent, ChattingInitState> {
-  ChattingBloc(ChattingInitState state) : super(state);
+  ChattingBloc() : super(ChattingInitState());
 
   final UserRepository userRepository = UserRepository();
 
