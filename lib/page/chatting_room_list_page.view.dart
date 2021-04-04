@@ -20,15 +20,13 @@ class ChattingRoomListPage extends StatefulWidget {
 
 class _ChattingRoomListPageState extends State<ChattingRoomListPage> with StreamProvider {
 
-  final GlobalKey _scaffoldKey = GlobalKey();
-
   void _chattingRoomInit() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<ChattingBloc>(_scaffoldKey.currentContext).add(ChattingInitEvent());
+      BlocProvider.of<ChattingBloc>(context).add(ChattingInitEvent());
 
       final pushMessage = MessageStream.instance.subScribeOnMessage().listen((data) {
         final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
-        BlocProvider.of<ChattingBloc>(_scaffoldKey.currentContext).add(
+        BlocProvider.of<ChattingBloc>(context).add(
             PushUpdateEvent(pushMessage.chattingRoom));
       });
       addStream('pushMessage', pushMessage);
@@ -38,7 +36,6 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
 
   @override
   void initState() {
-    print('ChattingRoomListPage initState');
     _chattingRoomInit();
     super.initState();
   }
@@ -51,10 +48,7 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
 
   @override
   Widget build(BuildContext context) {
-    print('ChattingRoomListPage build');
-
     return Scaffold(
-      key: _scaffoldKey,
       appBar: _getAppBar(),
       body: _getBody(context),
       floatingActionButton: _getUserListButton(context),
@@ -92,7 +86,6 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
 
                 if(data == null) return;
 
-                print('routeSlidePage $data');
                 BlocProvider.of<ChattingBloc>(context).add(
                     ChattingRoomsUpdateEvent(ChattingRoom.fromJson(data)));
               }),
@@ -132,7 +125,8 @@ class _ChattingRoomListPageState extends State<ChattingRoomListPage> with Stream
 
   Widget _getUserListButton(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () => RouteService.routeSlidePage(context, routeName: RouteNames.userListPage),
+      onPressed: () => RouteService.routeSlidePage(context, routeName: RouteNames.userListPage).then((value) =>
+          BlocProvider.of<ChattingBloc>(context).add(ChattingInitEvent())),
       child: Icon(Icons.search),
     );
   }

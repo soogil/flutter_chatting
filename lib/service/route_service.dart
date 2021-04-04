@@ -2,26 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_bloc.dart';
 import 'package:flutter_chatting/bloc/chatting/screen/chatting_screen_state.dart';
+import 'package:flutter_chatting/bloc/user/user_bloc.dart';
 import 'package:flutter_chatting/page/chatting_room_list_page.view.dart';
 import 'package:flutter_chatting/page/chatting_screen_page.view.dart';
 import 'package:flutter_chatting/page/user_list_page.view.dart';
 
 class RouteService {
-
   static Map<String, dynamic> _params = Map();
 
   static Route<dynamic> routes(RouteSettings settings) {
-     switch(settings.name) {
-       case RouteNames.chattingListPage:
-         return PageRouteSlider(page: ChattingRoomListPage());
-       case RouteNames.chattingScreenPage:
-         return PageRouteSlider(page: BlocProvider(
-           create: (_) => ChattingScreenBloc(ChattingScreenInitState(room: _params[RouteNames.chattingScreenPage])),
-             child: ChattingScreenPageView()));
-       case RouteNames.userListPage:
-         return PageRouteSlider(page: UserListPageView());
-     }
-     return null;
+    switch (settings.name) {
+      case RouteNames.chattingListPage:
+        return PageRouteSlider(page: ChattingRoomListPage());
+      case RouteNames.chattingScreenPage:
+        return PageRouteSlider(page: BlocProvider(
+            create: (_) => ChattingScreenBloc(
+                ChattingScreenInitState(room: _params[RouteNames.chattingScreenPage])),
+            child: ChattingScreenPageView()
+        ));
+      case RouteNames.userListPage:
+        return PageRouteSlider(
+            page: BlocProvider(
+                create: (_) => UserBloc(),
+                child: UserListPageView()
+            )
+        );
+    }
+    return null;
   }
 
   static Future routeSlidePage(BuildContext context,{
