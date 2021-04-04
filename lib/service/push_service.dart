@@ -29,6 +29,8 @@ class PushService {
     firebaseMessaging.configure(
       // FG 메세지 왔을때
       onMessage: (Map<String, dynamic> message) async {
+        print('firebaseMessaging $message');
+
         MessageStream.instance.onMessage(message);
       },
       // 메세지 클릭해서 앱이 구동됐을때
@@ -78,11 +80,11 @@ class PushService {
 
       request.add(requestBodyData);
 
-      // HttpClientResponse response =
+      HttpClientResponse response =
       await request.close().timeout(timeoutDuration);
-      // response.transform(utf8.decoder).listen((contents) {
-      //   print('sendFcmMessage $contents');
-      // });
+      response.transform(utf8.decoder).listen((contents) {
+        print('sendFcmMessage $contents');
+      });
       return true;
     } catch (e) {
       print('sendFcmMessage Error $e');

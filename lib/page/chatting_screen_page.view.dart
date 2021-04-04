@@ -19,14 +19,12 @@ class ChattingScreenPageView extends StatefulWidget {
 class _ChattingScreenPageViewState extends State<ChattingScreenPageView> with StreamProvider {
   final TextEditingController messageController = TextEditingController();
 
-  final GlobalKey _scaffoldKey = GlobalKey();
-
   void _chattingScreenInit() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<ChattingScreenBloc>(_scaffoldKey.currentContext).add(ChattingScreenInitEvent());
+      BlocProvider.of<ChattingScreenBloc>(context).add(ChattingScreenInitEvent());
       final screenMessage = MessageStream.instance.subScribeOnMessage().listen((data) {
         final pushMessage = PushMessage.fromJson(Map<String, dynamic>.from(data));
-        BlocProvider.of<ChattingScreenBloc>(_scaffoldKey.currentContext).add(PushUpdateScreenEvent(pushMessage.messageUser));
+        BlocProvider.of<ChattingScreenBloc>(context).add(PushUpdateScreenEvent(pushMessage.messageUser));
       });
       addStream('screenMessage', screenMessage);
     });
@@ -55,7 +53,6 @@ class _ChattingScreenPageViewState extends State<ChattingScreenPageView> with St
         return true;
       },
       child: Scaffold(
-        key: _scaffoldKey,
         appBar: _getAppBar(),
         body: _getBody(context),
       ),
